@@ -54,12 +54,24 @@ export function renderError(envelope: Envelope, fmt: OutputFormat): string {
     ...(e.hint ? [`Hint:  ${e.hint}`] : []),
     ...(e.status !== undefined ? [`HTTP:  ${e.status}`] : []),
     `Retryable: ${e.retryable}`,
+    ...renderDetails(e.details),
   ];
   return `${lines.join("\n")}\n`;
 }
 
 function formatJson(envelope: Envelope): string {
   return `${JSON.stringify(envelope, null, 2)}\n`;
+}
+
+function renderDetails(details: unknown): string[] {
+  if (details === undefined || details === null) return [];
+  if (Array.isArray(details) && details.every((d) => typeof d === "string")) {
+    return details.length === 0
+      ? []
+      : ["Cause:", ...details.map((d, i) => `  ${i === 0 ? "←" : " "} ${d}`)];
+  }
+  if (typeof details === "string") return [`Details: ${details}`];
+  return [`Details: ${JSON.stringify(details)}`];
 }
 
 function formatNdjson(data: unknown): string {

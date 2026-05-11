@@ -126,6 +126,16 @@ interface GoogleErrorResponse {
   error_description?: string;
 }
 
+function causeChain(err: unknown): string[] {
+  const messages: string[] = [];
+  let current: unknown = err;
+  while (current instanceof Error) {
+    messages.push(`${current.name}: ${current.message}`);
+    current = (current as { cause?: unknown }).cause;
+  }
+  return messages;
+}
+
 async function postToken(fetchImpl: typeof fetch, body: URLSearchParams): Promise<TokenSet> {
   let response: Response;
   try {
@@ -138,10 +148,12 @@ async function postToken(fetchImpl: typeof fetch, body: URLSearchParams): Promis
       body: body.toString(),
     });
   } catch (err) {
+    const detail = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
     throw new AuthError({
-      message: "Network error contacting Google OAuth token endpoint.",
+      message: `Network error contacting Google OAuth token endpoint: ${detail}`,
       cause: err,
       retryable: true,
+      details: causeChain(err),
     });
   }
 
