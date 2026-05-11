@@ -1,9 +1,11 @@
 import { fail, ok } from "./envelope.ts";
 import { type OutputFormat, pickFormat, renderError, renderOk } from "./format.ts";
+import { activeSpinner, startSpinner } from "./spinner.ts";
 
 export interface GlobalFlags {
   json?: boolean;
   format?: string;
+  quiet?: boolean;
 }
 
 export interface RunContext {
@@ -27,9 +29,13 @@ export interface RunContext {
 export async function run<T>(ctx: RunContext, handler: () => Promise<T>): Promise<never> {
   const isTty = Boolean(process.stdout.isTTY);
   const fmt: OutputFormat = pickFormat(ctx.flags.format, ctx.flags.json ?? false, isTty);
+  const showSpinner = !ctx.flags.quiet && !ctx.flags.json && fmt !== "json" && fmt !== "ndjson";
+  if (!showSpinner) activeSpinner()?.stop();
+  const spinner = showSpinner ? startSpinner() : { stop() {} };
   const started = performance.now();
   try {
     const data = await handler();
+    spinner.stop();
     const envelope = ok(data, {
       command: ctx.command,
       durationMs: Math.round(performance.now() - started),
@@ -38,6 +44,7 @@ export async function run<T>(ctx: RunContext, handler: () => Promise<T>): Promis
     process.stdout.write(renderOk(envelope, fmt));
     process.exit(0);
   } catch (err) {
+    spinner.stop();
     const { envelope, exit } = fail(err, {
       command: ctx.command,
       durationMs: Math.round(performance.now() - started),

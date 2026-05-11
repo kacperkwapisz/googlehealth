@@ -24,7 +24,7 @@ const login = defineCommand({
     ...commonOutputArgs,
   },
   run({ args }) {
-    return run({ command: "auth login", flags: args }, async () => {
+    return run({ command: "auth login", flags: { ...args, quiet: true } }, async () => {
       const config = await loadConfig();
       if (!config.clientId) {
         throw new Error(

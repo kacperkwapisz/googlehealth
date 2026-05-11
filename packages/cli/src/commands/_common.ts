@@ -13,6 +13,11 @@ export const commonOutputArgs = {
     description:
       "Output format: json|ndjson|csv|markdown|table. Default: table on TTY, json otherwise.",
   },
+  quiet: {
+    type: "boolean" as const,
+    description: "Suppress the spinner shown during long-running operations.",
+    default: false,
+  },
 } as const;
 
 export const timeWindowArgs = {

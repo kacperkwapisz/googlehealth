@@ -44,6 +44,18 @@ export interface DataTypeMeta {
   scope: DataScope;
   operations: readonly DataPointOperation[];
   webhook: boolean;
+  /**
+   * Override for the field used in time-bounded `filter=` expressions when the
+   * default record-type rule produces a member Google rejects. Most types are
+   * fine with the default; `sleep` is a known exception that only allows
+   * filtering on `interval.end_time` (not `interval.civil_start_time`).
+   *
+   * Field format is auto-detected from the suffix:
+   * - `.date` → `YYYY-MM-DD`
+   * - `.civil_*` → civil datetime without timezone
+   * - anything else → RFC 3339 Z-normalized timestamp
+   */
+  filterField?: string;
 }
 
 /**
@@ -294,6 +306,10 @@ export const DATA_TYPES = {
     scope: "sleep",
     operations: ["list", "get", "reconcile", "create", "update", "batchDelete"],
     webhook: true,
+    // Sleep is a Google Health quirk: `sleep.interval.civil_start_time` and
+    // `sleep.interval.start_time` are both rejected as unsupported members.
+    // Only end-time variants work. Empirically verified against live API.
+    filterField: "sleep.interval.end_time",
   },
   steps: {
     name: "steps",

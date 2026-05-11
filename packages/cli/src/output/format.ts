@@ -106,13 +106,55 @@ function toAsciiTable(rows: unknown[]): string {
   if (rows.length === 0) return "(no rows)\n";
   const flat = rows.map(flattenForTable);
   const cols = collectKeys(flat);
-  const widths = cols.map((c) => Math.max(c.length, ...flat.map((r) => String(r[c] ?? "").length)));
+  const term = Math.max(80, process.stdout.columns ?? 120);
+  const widths = computeColumnWidths(cols, flat, term);
+  const truncated = flat.map((r) =>
+    cols.map((c, i) => truncate(String(r[c] ?? ""), widths[i] ?? 0)),
+  );
   const fmtRow = (cells: string[]) =>
     `  ${cells.map((cell, i) => cell.padEnd(widths[i] ?? 0)).join("  ")}`;
-  const header = fmtRow(cols);
+  const header = fmtRow(cols.map((c, i) => truncate(c, widths[i] ?? 0)));
   const sep = fmtRow(widths.map((w) => "-".repeat(w)));
-  const body = flat.map((r) => fmtRow(cols.map((c) => String(r[c] ?? "")))).join("\n");
+  const body = truncated.map(fmtRow).join("\n");
   return `${header}\n${sep}\n${body}\n`;
+}
+
+/**
+ * Pick per-column widths that fit the terminal. Two pass:
+ * 1. Each column gets its natural width (max of header + content).
+ * 2. If totals exceed terminal width, shrink the widest columns toward an
+ *    even split until we fit. Minimum cell width is 6 chars.
+ */
+function computeColumnWidths(
+  cols: string[],
+  rows: Record<string, unknown>[],
+  termWidth: number,
+): number[] {
+  const natural = cols.map((c) =>
+    Math.max(c.length, ...rows.map((r) => String(r[c] ?? "").length)),
+  );
+  const padding = cols.length * 2 + 2;
+  const budget = Math.max(40, termWidth - padding);
+  let total = natural.reduce((a, b) => a + b, 0);
+  if (total <= budget) return natural;
+  const widths = [...natural];
+  const minW = 6;
+  while (total > budget) {
+    let maxIdx = 0;
+    for (let i = 1; i < widths.length; i++) {
+      if ((widths[i] ?? 0) > (widths[maxIdx] ?? 0)) maxIdx = i;
+    }
+    if ((widths[maxIdx] ?? 0) <= minW) break;
+    widths[maxIdx] = (widths[maxIdx] ?? 0) - 1;
+    total -= 1;
+  }
+  return widths;
+}
+
+function truncate(value: string, max: number): string {
+  if (max <= 0 || value.length <= max) return value;
+  if (max <= 1) return value.slice(0, max);
+  return `${value.slice(0, max - 1)}…`;
 }
 
 function flattenForTable(value: unknown): Record<string, unknown> {
