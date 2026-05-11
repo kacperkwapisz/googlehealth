@@ -69,9 +69,15 @@ interface OpenServer {
   waitForCode(state: string): Promise<string>;
 }
 
+interface CallbackResult {
+  code?: string;
+  state?: string;
+  error?: string;
+}
+
 async function openServer(host: string, preferredPort: number): Promise<OpenServer> {
   return new Promise((resolve, reject) => {
-    let onResult: (err: Error | null, code?: string) => void = () => {};
+    let onCallback: (result: CallbackResult) => void = () => {};
     const server = createServer((req: IncomingMessage, res: ServerResponse) => {
       const url = new URL(req.url ?? "/", `http://${host}`);
       if (url.pathname !== "/callback") {
@@ -79,28 +85,22 @@ async function openServer(host: string, preferredPort: number): Promise<OpenServ
         res.end("Not found");
         return;
       }
-      const code = url.searchParams.get("code");
-      const state = url.searchParams.get("state");
-      const error = url.searchParams.get("error");
+      const code = url.searchParams.get("code") ?? undefined;
+      const state = url.searchParams.get("state") ?? undefined;
+      const error = url.searchParams.get("error") ?? undefined;
       if (error) {
         respond(res, 400, `<h1>Authorization failed</h1><p>${escapeHtml(error)}</p>`);
-        onResult(new AuthError({ message: `Authorization denied: ${error}` }));
-        return;
-      }
-      if (!code) {
+      } else if (!code) {
         respond(res, 400, "<h1>Missing ?code parameter.</h1>");
-        onResult(new AuthError({ message: "Authorization callback missing `code`." }));
-        return;
+      } else {
+        respond(
+          res,
+          200,
+          "<h1>You're authorized.</h1><p>You can close this tab and return to the terminal.</p>",
+        );
       }
-      respond(
-        res,
-        200,
-        "<h1>You're authorized.</h1><p>You can close this tab and return to the terminal.</p>",
-      );
-      onResult(null, code);
+      onCallback({ code, state, error });
       void Promise.resolve().then(() => server.close());
-      // Capture state for caller-side verification through closure.
-      (server as unknown as { _capturedState?: string })._capturedState = state ?? "";
     });
 
     server.on("error", reject);
@@ -114,13 +114,16 @@ async function openServer(host: string, preferredPort: number): Promise<OpenServ
         port: address.port,
         waitForCode(expectedState) {
           return new Promise<string>((res, rej) => {
-            onResult = (err, code) => {
-              if (err) return rej(err);
-              const actual = (server as unknown as { _capturedState?: string })._capturedState;
-              if (actual !== expectedState) {
+            onCallback = ({ code, state, error }) => {
+              if (error) {
+                return rej(new AuthError({ message: `Authorization denied: ${error}` }));
+              }
+              if (state !== expectedState) {
                 return rej(new AuthError({ message: "OAuth state mismatch — possible CSRF." }));
               }
-              if (!code) return rej(new AuthError({ message: "Empty authorization code." }));
+              if (!code) {
+                return rej(new AuthError({ message: "Authorization callback missing `code`." }));
+              }
               res(code);
             };
           });
