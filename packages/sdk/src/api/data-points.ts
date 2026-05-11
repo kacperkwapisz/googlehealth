@@ -14,7 +14,7 @@ export interface ListOptions {
   /** Convenience: composes a time filter using the data type's metadata. */
   from?: TimeInput;
   to?: TimeInput;
-  /** Optional ordering, e.g. `interval.start_time desc`. */
+  /** Optional ordering, e.g. `interval.civil_start_time desc`. */
   orderBy?: string;
   signal?: AbortSignal;
 }

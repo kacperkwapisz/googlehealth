@@ -110,7 +110,7 @@ import { DATA_TYPES, getDataType, listDataTypes, scopeFor } from "googlehealth";
 
 listDataTypes().length; // 31
 getDataType("heart-rate"); // { name, snakeName, field, record, scope, operations, webhook }
-scopeFor("steps", true);   // "https://www.googleapis.com/auth/health.activity_and_fitness.write"
+scopeFor("steps", true);   // "https://www.googleapis.com/auth/googlehealth.activity_and_fitness"
 ```
 
 | Record type | Examples |

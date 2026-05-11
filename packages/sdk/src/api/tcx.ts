@@ -19,7 +19,9 @@ export class TcxApi {
         hint: "Pass the full resource name from a `dataPoints.list('exercise', ...)` response.",
       });
     }
-    const path = name.startsWith("/") ? `${name}:exportTcx` : `/${name}:exportTcx`;
+    const path = name.startsWith("/")
+      ? `${name}:exportExerciseTcx`
+      : `/${name}:exportExerciseTcx`;
     return this.http.request<string>(path, {
       method: "GET",
       accept: "application/xml",

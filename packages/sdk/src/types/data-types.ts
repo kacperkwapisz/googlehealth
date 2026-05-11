@@ -380,6 +380,6 @@ export function supports(name: DataTypeName, op: DataPointOperation): boolean {
 }
 
 export function scopeFor(name: DataTypeName, write = false): string {
-  const scope = DATA_TYPES[name].scope;
-  return `https://www.googleapis.com/auth/health.${scope}.${write ? "write" : "read"}`;
+  const category = DATA_TYPES[name].scope;
+  return `https://www.googleapis.com/auth/googlehealth.${category}${write ? "" : ".readonly"}`;
 }

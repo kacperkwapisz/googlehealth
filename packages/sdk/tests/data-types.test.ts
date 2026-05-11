@@ -36,14 +36,16 @@ describe("data type registry", () => {
 
   test("scopeFor maps to the correct Google Health scope", () => {
     expect(scopeFor("heart-rate", false)).toBe(
-      "https://www.googleapis.com/auth/health.health_metrics_and_measurements.read",
+      "https://www.googleapis.com/auth/googlehealth.health_metrics_and_measurements.readonly",
     );
     expect(scopeFor("steps", true)).toBe(
-      "https://www.googleapis.com/auth/health.activity_and_fitness.write",
+      "https://www.googleapis.com/auth/googlehealth.activity_and_fitness",
     );
-    expect(scopeFor("sleep", false)).toBe("https://www.googleapis.com/auth/health.sleep.read");
+    expect(scopeFor("sleep", false)).toBe(
+      "https://www.googleapis.com/auth/googlehealth.sleep.readonly",
+    );
     expect(scopeFor("hydration-log", true)).toBe(
-      "https://www.googleapis.com/auth/health.nutrition.write",
+      "https://www.googleapis.com/auth/googlehealth.nutrition",
     );
   });
 
