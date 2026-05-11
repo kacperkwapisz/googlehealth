@@ -1,0 +1,24 @@
+{
+  "name": "googlehealth-monorepo",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Unofficial Bun + TypeScript SDK and CLI for the Google Health API.",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm -r --parallel dev",
+    "test": "bun test",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "fix": "biome check --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.15",
+    "@types/node": "^25.6.2",
+    "tsdown": "^0.22.0",
+    "typescript": "^6.0.3"
+  },
+  "packageManager": "pnpm@10.18.1",
+  "engines": {
+    "node": ">=20"
+  }
+}

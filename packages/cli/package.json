@@ -1,0 +1,48 @@
+{
+  "name": "googlehealth-cli",
+  "version": "0.0.2",
+  "description": "Unofficial CLI for the Google Health API. Wraps the googlehealth SDK with stable --json output for shell and AI agents.",
+  "keywords": [
+    "google-health",
+    "google-health-api",
+    "fitbit",
+    "fitbit-air",
+    "cli",
+    "ghealth",
+    "health",
+    "wearables",
+    "jq",
+    "agent"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "ghealth": "./dist/main.mjs",
+    "googlehealth": "./dist/main.mjs"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "citty": "^0.1.6",
+    "googlehealth": "workspace:*",
+    "open": "^10.1.0",
+    "zod": "^3.23.0",
+    "zod-to-json-schema": "^3.23.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kacperkwapisz/googlehealth.git",
+    "directory": "packages/cli"
+  }
+}

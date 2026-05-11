@@ -1,0 +1,57 @@
+{
+  "name": "googlehealth",
+  "version": "0.0.1",
+  "description": "Unofficial typed TypeScript SDK for the Google Health API v4. Bun + Node 20+.",
+  "keywords": [
+    "google-health",
+    "google-health-api",
+    "fitbit",
+    "fitbit-air",
+    "health",
+    "wearables",
+    "hrv",
+    "sleep",
+    "recovery",
+    "whoop",
+    "oauth"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./schemas": {
+      "types": "./dist/schemas.d.ts",
+      "import": "./dist/schemas.js",
+      "require": "./dist/schemas.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "zod": "^3.23.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kacperkwapisz/googlehealth.git",
+    "directory": "packages/sdk"
+  }
+}
