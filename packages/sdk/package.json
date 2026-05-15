@@ -1,6 +1,6 @@
 {
   "name": "googlehealth",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Unofficial typed TypeScript SDK for the Google Health API v4. Bun + Node 20+.",
   "keywords": [
     "google-health",

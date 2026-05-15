@@ -1,6 +1,6 @@
 {
   "name": "googlehealth-cli",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Unofficial CLI for the Google Health API. Wraps the googlehealth SDK with stable --json output for shell and AI agents.",
   "keywords": [
     "google-health",
