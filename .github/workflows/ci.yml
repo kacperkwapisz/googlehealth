@@ -47,11 +47,16 @@ jobs:
       - name: Typecheck SDK
         run: pnpm -F googlehealth typecheck
 
+      # CLI types resolve via the SDK's published d.ts in dist/, so the SDK
+      # must be built before the CLI typecheck and the final build step.
+      - name: Build SDK
+        run: pnpm -F googlehealth build
+
       - name: Typecheck CLI
         run: pnpm -F googlehealth-cli typecheck
 
-      - name: Build
-        run: pnpm build
+      - name: Build CLI
+        run: pnpm -F googlehealth-cli build
 
       - name: Test
         run: bun test
