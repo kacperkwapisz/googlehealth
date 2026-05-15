@@ -41,6 +41,15 @@ packages/
 └── cli/    # → publishes `googlehealth-cli`, depends on `googlehealth`
 ```
 
+## Releases
+
+Both packages ship in lockstep — they always share the same version number and release together.
+
+- [`googlehealth` CHANGELOG](./packages/sdk/CHANGELOG.md)
+- [`googlehealth-cli` CHANGELOG](./packages/cli/CHANGELOG.md)
+
+Releases are cut from `main` with `pnpm release:patch | release:minor | release:major` (or `pnpm release <semver>`). The script bumps versions, promotes each package's `## [Unreleased]` section to a dated release heading, commits, tags `v<version>`, and pushes. The tag push triggers GitHub Actions, which builds, tests, publishes both packages to npm with provenance, and creates a GitHub Release with combined changelog notes.
+
 ## License
 
 MIT

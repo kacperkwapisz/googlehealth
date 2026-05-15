@@ -35,8 +35,13 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",

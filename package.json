@@ -9,7 +9,12 @@
     "test": "bun test",
     "lint": "biome check .",
     "format": "biome format --write .",
-    "fix": "biome check --write ."
+    "fix": "biome check --write .",
+    "release": "bun scripts/release.ts",
+    "release:patch": "bun scripts/release.ts patch",
+    "release:minor": "bun scripts/release.ts minor",
+    "release:major": "bun scripts/release.ts major",
+    "release:dry": "bun scripts/release.ts --dry-run"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.15",
