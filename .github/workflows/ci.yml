@@ -18,7 +18,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22]
+        # tsdown >=0.22 requires Node ^22.18 || >=24, so the build toolchain
+        # can't run on Node 20 even though the published packages support it
+        # at runtime (package.json engines: >=20).
+        node: [22]
     name: verify (node ${{ matrix.node }})
     steps:
       - name: Checkout
