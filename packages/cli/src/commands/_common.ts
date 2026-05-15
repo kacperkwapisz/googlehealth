@@ -5,17 +5,16 @@
 export const commonOutputArgs = {
   json: {
     type: "boolean" as const,
-    description: "Force stable JSON envelope output (suitable for jq, AI agents).",
+    description: "JSON envelope output.",
     default: false,
   },
   format: {
     type: "string" as const,
-    description:
-      "Output format: json|ndjson|csv|markdown|table. Default: table on TTY, json otherwise.",
+    description: "json|ndjson|csv|markdown|table",
   },
   quiet: {
     type: "boolean" as const,
-    description: "Suppress the spinner shown during long-running operations.",
+    description: "Suppress spinner.",
     default: false,
   },
 } as const;

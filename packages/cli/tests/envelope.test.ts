@@ -3,7 +3,7 @@ import { AuthError, GoogleHealthError, RateLimitError } from "googlehealth";
 import { ExitCode } from "../src/exit-codes.ts";
 import { fail, ok } from "../src/output/envelope.ts";
 
-const meta = { command: "x", durationMs: 0 };
+const meta = { command: "x" };
 
 describe("envelope.ok", () => {
   test("returns a typed OkEnvelope", () => {

@@ -42,7 +42,7 @@ Every command — including errors — returns the same shape:
 {
   "ok": true,
   "data": <command-specific>,
-  "meta": { "command": "data list heart-rate", "durationMs": 84 }
+  "meta": { "command": "data list heart-rate" }
 }
 ```
 
@@ -50,7 +50,7 @@ Every command — including errors — returns the same shape:
 {
   "ok": false,
   "error": { "code": "AUTH", "message": "Unauthorized.", "retryable": false, "hint": "...", "status": 401 },
-  "meta": { "command": "data list heart-rate", "durationMs": 12 }
+  "meta": { "command": "data list heart-rate" }
 }
 ```
 
