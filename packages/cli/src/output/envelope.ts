@@ -26,7 +26,6 @@ export interface ErrorEnvelope {
 
 export interface EnvelopeMeta {
   command: string;
-  durationMs: number;
   count?: number;
   nextPageToken?: string;
   dataType?: string;

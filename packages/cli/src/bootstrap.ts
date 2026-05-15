@@ -18,8 +18,7 @@ const main = defineCommand({
   meta: {
     name: "ghealth",
     version: VERSION,
-    description:
-      "Unofficial CLI for the Google Health API. Stable `--json` envelope; safe for jq and AI agents.",
+    description: "Unofficial CLI for the Google Health API.",
   },
   subCommands: {
     auth: authCmd,

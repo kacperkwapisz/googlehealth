@@ -34,7 +34,6 @@ describe("ghealth golden output", () => {
     expect(Array.isArray(env.data)).toBe(true);
     expect(env.data.length).toBe(31);
     expect(env.meta.command).toBe("types list");
-    expect(typeof env.meta.durationMs).toBe("number");
   });
 
   test("types describe heart-rate --json", async () => {

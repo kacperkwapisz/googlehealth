@@ -28,7 +28,7 @@ interface Manifest {
     success: {
       ok: true;
       data: "<command-specific>";
-      meta: { command: string; durationMs: number };
+      meta: { command: string };
     };
     error: { ok: false; error: { code: string; message: string }; meta: object };
   };
@@ -37,13 +37,12 @@ interface Manifest {
 }
 
 /**
- * `ghealth agent manifest` — emit a machine-readable description of the
- * entire CLI surface so AI agents can introspect what's available without
- * round-tripping `--help` or guessing argument names.
+ * `ghealth agent manifest` — machine-readable description of the entire CLI
+ * surface, so callers can introspect commands and args without scraping --help.
  */
 export function buildAgentCmd(root: CommandDef): CommandDef {
   return defineCommand({
-    meta: { name: "agent", description: "Machine-readable interface for AI agents." },
+    meta: { name: "agent", description: "Machine-readable CLI manifest." },
     subCommands: {
       manifest: defineCommand({
         meta: { name: "manifest", description: "Print the CLI manifest as JSON." },
@@ -68,7 +67,7 @@ export function buildAgentCmd(root: CommandDef): CommandDef {
                 success: {
                   ok: true,
                   data: "<command-specific>",
-                  meta: { command: "<command>", durationMs: 0 },
+                  meta: { command: "<command>" },
                 },
                 error: {
                   ok: false,

@@ -1,5 +1,10 @@
 import { defineCommand } from "citty";
-import { DEFAULT_READ_SCOPES, DEFAULT_WRITE_SCOPES, isExpired } from "googlehealth";
+import {
+  DEFAULT_READ_SCOPES,
+  DEFAULT_WRITE_SCOPES,
+  GoogleHealthError,
+  isExpired,
+} from "googlehealth";
 import { runLoopbackFlow } from "../auth/loopback.ts";
 import { FileTokenStore } from "../config/file-token-store.ts";
 import { loadConfig } from "../config/store.ts";
@@ -27,9 +32,13 @@ const login = defineCommand({
     return run({ command: "auth login", flags: { ...args, quiet: true } }, async () => {
       const config = await loadConfig();
       if (!config.clientId) {
-        throw new Error(
-          "No OAuth client ID configured. Run `ghealth config set client-id <id>` (and `client-secret` if your client is type Web) or set GHEALTH_CLIENT_ID.",
-        );
+        // Use UNKNOWN code so this stays on exit 1 (UserError) for prior
+        // scripts, while still flowing through the structured envelope.
+        throw new GoogleHealthError({
+          code: "UNKNOWN",
+          message: "No OAuth client ID configured.",
+          hint: "Run `ghealth config set client-id <id>` (and `client-secret` if your client is type Web).",
+        });
       }
       const scopes = args.scopes
         ? args.scopes

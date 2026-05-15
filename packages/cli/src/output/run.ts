@@ -32,13 +32,11 @@ export async function run<T>(ctx: RunContext, handler: () => Promise<T>): Promis
   const showSpinner = !ctx.flags.quiet && !ctx.flags.json && fmt !== "json" && fmt !== "ndjson";
   if (!showSpinner) activeSpinner()?.stop();
   const spinner = showSpinner ? startSpinner() : { stop() {} };
-  const started = performance.now();
   try {
     const data = await handler();
     spinner.stop();
     const envelope = ok(data, {
       command: ctx.command,
-      durationMs: Math.round(performance.now() - started),
       ...(ctx.meta ?? {}),
     });
     process.stdout.write(renderOk(envelope, fmt));
@@ -47,7 +45,6 @@ export async function run<T>(ctx: RunContext, handler: () => Promise<T>): Promis
     spinner.stop();
     const { envelope, exit } = fail(err, {
       command: ctx.command,
-      durationMs: Math.round(performance.now() - started),
       ...(ctx.meta ?? {}),
     });
     process.stderr.write(renderError(envelope, fmt));

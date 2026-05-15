@@ -47,10 +47,12 @@ export async function runLoopbackFlow(options: LoopbackOptions): Promise<TokenSe
     codeChallengeMethod: pkce.codeChallengeMethod,
   });
 
-  log(`Open this URL to authorize:\n${authUrl}`);
-  if (options.openBrowser !== false) {
+  if (options.openBrowser === false) {
+    log(`Open this URL to authorize:\n${authUrl}`);
+  } else {
+    log("Waiting for browser authorization…");
     open(authUrl).catch(() => {
-      log("(Could not launch your browser automatically; open the URL manually.)");
+      log(`Could not launch a browser. Open this URL to authorize:\n${authUrl}`);
     });
   }
 

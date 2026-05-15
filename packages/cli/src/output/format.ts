@@ -51,27 +51,25 @@ export function renderError(envelope: Envelope, fmt: OutputFormat): string {
   const e = envelope.error;
   const lines = [
     `Error [${e.code}]: ${e.message}`,
-    ...(e.hint ? [`Hint:  ${e.hint}`] : []),
-    ...(e.status !== undefined ? [`HTTP:  ${e.status}`] : []),
-    `Retryable: ${e.retryable}`,
+    ...(e.hint ? [`Hint: ${e.hint}`] : []),
     ...renderDetails(e.details),
   ];
   return `${lines.join("\n")}\n`;
 }
 
-function formatJson(envelope: Envelope): string {
-  return `${JSON.stringify(envelope, null, 2)}\n`;
-}
-
 function renderDetails(details: unknown): string[] {
   if (details === undefined || details === null) return [];
-  if (Array.isArray(details) && details.every((d) => typeof d === "string")) {
-    return details.length === 0
-      ? []
-      : ["Cause:", ...details.map((d, i) => `  ${i === 0 ? "←" : " "} ${d}`)];
-  }
   if (typeof details === "string") return [`Details: ${details}`];
-  return [`Details: ${JSON.stringify(details)}`];
+  if (Array.isArray(details) && details.every((d) => typeof d === "string")) {
+    if (details.length === 0) return [];
+    if (details.length === 1) return [`Details: ${details[0]}`];
+    return [`Details: ${details.join("; ")}`];
+  }
+  return [];
+}
+
+function formatJson(envelope: Envelope): string {
+  return `${JSON.stringify(envelope, null, 2)}\n`;
 }
 
 function formatNdjson(data: unknown): string {

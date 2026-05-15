@@ -1,5 +1,5 @@
 import { defineCommand } from "citty";
-import { DATA_TYPES, getDataType, listDataTypes } from "googlehealth";
+import { getDataType, listDataTypes } from "googlehealth";
 import { run } from "../output/run.ts";
 import { commonOutputArgs } from "./_common.ts";
 
@@ -40,8 +40,9 @@ const describe = defineCommand({
     return run({ command: "types describe", flags: args }, async () => {
       const meta = getDataType(args.name);
       if (!meta) {
-        const available = Object.keys(DATA_TYPES).join(", ");
-        throw new Error(`Unknown data type "${args.name}". Available: ${available}`);
+        throw new Error(
+          `Unknown data type "${args.name}". Run \`ghealth types list\` to see all options.`,
+        );
       }
       return meta;
     });
