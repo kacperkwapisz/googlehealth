@@ -6,8 +6,6 @@
 > **Unofficial.** Typed TypeScript SDK for the [Google Health API](https://developers.google.com/health). Not affiliated with Google.
 
 ```bash
-pnpm add googlehealth
-# or
 npm install googlehealth
 ```
 
