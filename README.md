@@ -8,8 +8,8 @@ This is a monorepo. Two packages ship from here:
 
 | Package | Install | Use it for |
 | --- | --- | --- |
-| **[`googlehealth`](./packages/sdk)** | `pnpm add googlehealth` | The typed SDK. Dashboards, mobile apps, custom integrations, anything that needs the Google Health API in TypeScript. |
-| **[`googlehealth-cli`](./packages/cli)** | `pnpm add -g googlehealth-cli` | The `ghealth` / `googlehealth` binary. Shell scripting, data export, AI agents via `--json`, OAuth setup. |
+| **[`googlehealth`](./packages/sdk)** | `npm install googlehealth` | The typed SDK. Dashboards, mobile apps, custom integrations, anything that needs the Google Health API in TypeScript. |
+| **[`googlehealth-cli`](./packages/cli)** | `npm install -g googlehealth-cli` | The `ghealth` / `googlehealth` binary. Shell scripting, data export, AI agents via `--json`, OAuth setup. |
 
 ## Why this exists
 
